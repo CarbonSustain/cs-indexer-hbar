@@ -8,5 +8,5 @@
     "types": ["jest", "node"],  // ✅ add 'node' here
     "esModuleInterop": true     // ✅ also needed for next fix
   },
-  "include": ["src/**/*", "test/**/*"]
+  "include": ["src/**/*", "test/**/*", "examples/main.ts"]
 }
