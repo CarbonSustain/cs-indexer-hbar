@@ -5,7 +5,6 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "jest",
     "prepare": "npm run build"
   },
   "dependencies": {
