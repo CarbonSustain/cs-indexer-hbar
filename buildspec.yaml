@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo Getting GitHub token from Secrets Manager...
+      - export GITHUB_PAT=$(aws secretsmanager get-secret-value --secret-id github/pat --query SecretString --output text)
+      - echo "
+//npm.pkg.github.com/:_authToken=$GITHUB_PAT" > ~/.npmrc
+      - git config --global url."https://$GITHUB_PAT@github.com/".insteadOf "https://github.com/"
+      - echo Installing dependencies...
+      - npm install
+  build:
+    commands:
+      - npm run build
