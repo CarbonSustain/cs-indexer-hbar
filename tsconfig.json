@@ -6,7 +6,7 @@
     "emitDeclarationOnly": false,
     "declaration": true,
     "strict": true,
-    "types": ["jest", "node"],  // ✅ add 'node' here
+    "types": ["node"],  // ✅ add 'node' here
     "esModuleInterop": true     // ✅ also needed for next fix
   },
   "include": ["src/**/*", "test/**/*", "examples/main.ts"]
