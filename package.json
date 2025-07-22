@@ -13,5 +13,12 @@
   "devDependencies": {
     "@types/node": "^24.0.13",
     "typescript": "^5.1.6"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
   }
 }
