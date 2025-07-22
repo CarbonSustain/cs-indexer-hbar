@@ -3,6 +3,7 @@
     "target": "ES2019",
     "module": "commonjs",
     "outDir": "dist",
+    "emitDeclarationOnly": false,
     "declaration": true,
     "strict": true,
     "types": ["jest", "node"],  // ✅ add 'node' here
