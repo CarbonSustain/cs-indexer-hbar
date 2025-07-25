@@ -36,37 +36,39 @@ export class GlobalIndexer {
         throw new Error("Keywords must be a non-empty array.");
     }
 
-    const query = encodeURIComponent(JSON.stringify(keywords));
-    const resp = await this.client.get(`/entities/vc-documents?keywords=${query}`);
+    const encodedKeywords = `[${keywords.map(k => `"${encodeURIComponent(k)}"`).join(",")}]`;
+    // console.log(encodedKeywords)
+    const resp = await this.client.get(`/entities/vc-documents?keywords=${encodedKeywords}`);
     // console.log("getting the VC",resp.data.items.data.items)
-    const items: any[] = resp.data?.items || [];
+    // console.log(resp)
+    const items: any[] = resp?.data?.items;
+    // console.log(items)
+    // const documents = await Promise.all(items.map(async (item: any) => {
+    //     const timestamp = item.consensusTimestamp;
+    //     if (!timestamp) return null;
 
-    const documents = await Promise.all(items.map(async (item: any) => {
-        const timestamp = item.consensusTimestamp;
-        if (!timestamp) return null;
+        // try {
+        //     const docResp = await this.client.get(`/entities/vc-documents/${timestamp}`);
+        //     const docString = docResp.data?.item?.documents?.[0];
+        //     if (!docString) return null;
 
-        try {
-            const docResp = await this.client.get(`/entities/vc-documents/${timestamp}`);
-            const docString = docResp.data?.item?.documents?.[0];
-            if (!docString) return null;
-
-            try {
-                return JSON.parse(docString);
-            } catch (parseErr) {
-                console.error(`Error parsing document for ${timestamp}:`, parseErr instanceof Error ? parseErr.message : parseErr);
-                return null;
-            }
-        } catch (err) {
-            if (err instanceof Error) {
-                console.error(`Error fetching document for ${timestamp}:`, err.message);
-            } else {
-                console.error(`Error fetching document for ${timestamp}:`, err);
-            }
-            return null;
-        }
-    }));
-
-    return documents; // filter out nulls
+        //     try {
+        //         return JSON.parse(docString);
+        //     } catch (parseErr) {
+        //         console.error(`Error parsing document for ${timestamp}:`, parseErr instanceof Error ? parseErr.message : parseErr);
+        //         return null;
+        //     }
+        // } catch (err) {
+        //     if (err instanceof Error) {
+        //         console.error(`Error fetching document for ${timestamp}:`, err.message);
+        //     } else {
+        //         console.error(`Error fetching document for ${timestamp}:`, err);
+        //     }
+        //     return null;
+        // }
+    // }));
+ 
+    return items // filter out nulls
 }
 
 

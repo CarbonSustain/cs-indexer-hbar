@@ -9,49 +9,86 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-const client = createClient( ${process.env.BASE_URL}, ${process.env.BEARER_TOKEN});
+const client = createClient( `${process.env.BASE_URL}`, `${process.env.BEARER_TOKEN}`);
 const indexer = new GlobalIndexer(client);
 
 // POST /run to trigger your filter function
-app.post("/search/documents", async (req, res) => {
+// app.post("/search/documents", async (req, res) => {
+//     try {
+        
+//         const keywords: string[] = [];
+
+//         for (const key in req.query) {
+//           const value = req.query[key];
+    
+//           if (typeof value === "string") {
+//             keywords.push(...value.split(",").map(v => v.trim()));
+//           } else if (Array.isArray(value)) {
+//             value.forEach(val => {
+//               if (typeof val === "string") {
+//                 keywords.push(...val.split(",").map(v => v.trim()));
+//               }
+//             });
+//           }
+//         }
+//           console.log(keywords)
+//         // Call your library method with the array
+//         const result = await indexer.getDocumentsByKeywords(keywords);
+//         res.json(result);
+//     // const result = await indexer.getDocumentsByKeywords(filters);
+   
+//    } catch (err: any) {
+//       console.error("Error in /search/documents:", err.message);
+//       res.status(500).json({ error: "Failed to fetch VC documents" });
+//     }
+//   })
+
+  app.post("/search/documents", async (req, res) => {
     try {
-        // const filters: Record<string, string[]> = {};
-    
-        // for (const key in req.query) {
-        //   const value = req.query[key];
-    
-        //   if (typeof value === "string") {
-        //     filters[key] = value.split(",");
-        //   } else if (Array.isArray(value)) {
-        //     filters[key] = value.flatMap(v => v.split(","));
-        //   }
-        // }
-
-        const keywords: string[] = [];
-
-        for (const key in req.query) {
-          const value = req.query[key];
-    
-          if (typeof value === "string") {
+      const keywords: string[] = [];
+      const allowedKeys = ["region", "project_type", "verification", "sdgs"];
+      for (const key of allowedKeys) {
+        const value = req.query[key];
+  
+        if (typeof value === "string") {
+          try {
+            // Try to parse it as JSON array
+            const parsed = JSON.parse(value);
+            if (Array.isArray(parsed)) {
+              parsed.forEach(v => keywords.push(String(v)));
+            } else {
+              keywords.push(String(parsed));
+            }
+          } catch {
+            // Fallback: comma split
             keywords.push(...value.split(",").map(v => v.trim()));
-          } else if (Array.isArray(value)) {
-            value.forEach(val => {
-              keywords.push(...val.split(",").map(v => v.trim()));
-            });
           }
+        } else if (Array.isArray(value)) {
+          value.forEach(val => {
+            try {
+              const parsed = JSON.parse(String(val));
+              if (Array.isArray(parsed)) {
+                parsed.forEach(v => keywords.push(String(v)));
+              } else {
+                keywords.push(String(parsed));
+              }
+            } catch {
+              keywords.push(...String(val).split(",").map(v => v.trim()));
+            }
+          });
         }
-    
-        // Call your library method with the array
-        const result = await indexer.getDocumentsByKeywords(keywords);
-        res.json(result);
-    // const result = await indexer.getDocumentsByKeywords(filters);
-    // res.json({ result });
-    // res.json({filters})
-  } catch (err: any) {
-    console.error("Error in /run:", err.message);
-    res.status(500).json({ error: "Failed to fetch VC documents" });
-  }
-});
+      }
+  
+      // console.log("Final keywords:", keywords);
+      const result = await indexer.getDocumentsByKeywords(keywords);
+      // console.log(result)
+      res.json(result);
+    } catch (err: any) {
+      console.error("Error in /search/documents:", err.message);
+      res.status(500).json({ error: "Failed to fetch VC documents" });
+    }
+  });
+  
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`API running on http://localhost:${PORT}`));
