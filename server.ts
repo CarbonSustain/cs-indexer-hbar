@@ -12,44 +12,21 @@ app.use(express.json());
 const client = createClient( `${process.env.BASE_URL}`, `${process.env.BEARER_TOKEN}`);
 const indexer = new GlobalIndexer(client);
 
-// POST /run to trigger your filter function
-// app.post("/search/documents", async (req, res) => {
-//     try {
-        
-//         const keywords: string[] = [];
-
-//         for (const key in req.query) {
-//           const value = req.query[key];
-    
-//           if (typeof value === "string") {
-//             keywords.push(...value.split(",").map(v => v.trim()));
-//           } else if (Array.isArray(value)) {
-//             value.forEach(val => {
-//               if (typeof val === "string") {
-//                 keywords.push(...val.split(",").map(v => v.trim()));
-//               }
-//             });
-//           }
-//         }
-//           console.log(keywords)
-//         // Call your library method with the array
-//         const result = await indexer.getDocumentsByKeywords(keywords);
-//         res.json(result);
-//     // const result = await indexer.getDocumentsByKeywords(filters);
-   
-//    } catch (err: any) {
-//       console.error("Error in /search/documents:", err.message);
-//       res.status(500).json({ error: "Failed to fetch VC documents" });
-//     }
-//   })
-
   app.post("/search/documents", async (req, res) => {
     try {
       const keywords: string[] = [];
       const allowedKeys = ["region", "project_type", "verification", "sdgs"];
       for (const key of allowedKeys) {
-        const value = req.query[key];
-  
+
+        const value = req.body[key];
+        // console.log(req.body)
+        // if (typeof val === "string") {
+        //   keywords.push(val.trim());
+        // } else if (Array.isArray(val)) {
+        //   keywords.push(...val.map(v => v.trim()));
+        // }
+        // console.log(keywords)
+        // const value = req.query[key];
         if (typeof value === "string") {
           try {
             // Try to parse it as JSON array
