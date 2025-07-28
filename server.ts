@@ -1,10 +1,13 @@
-const express = require("express");
+import express from "express";
+import dotenv from "dotenv";
+import axio from "axios";
+import { createClient } from "./src/client.js";
+import { GlobalIndexer } from "./src/indexer.js"
 import { Request, Response } from "express"; // ✅ keep this line just for types
 
-const dotenv = require("dotenv");
-const axios = require("axios");
-const { createClient } = require("./src/client");
-const { GlobalIndexer } = require("./src/indexer");
+
+// const { createClient } = require("./src/client");
+// const { GlobalIndexer } = require("./src/indexer");
 
 dotenv.config();
 
