@@ -1,0 +1,433 @@
+{
+	"info": {
+		"_postman_id": "34566f22-cc1a-453d-8cc7-b44b1511cbbd",
+		"name": "Guardian",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45879128"
+	},
+	"item": [
+		{
+			"name": "VC-documents",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzU4YWFjY2U1MmMwODliZDdhNGMyZSIsIm5hbWUiOiJzYWlfc3JpamEiLCJob3N0IjoiaW5kZXhlci5ndWFyZGlhbnNlcnZpY2UuYXBwIiwiaWF0IjoxNzUyNTM4NTE3LCJleHAiOjE3NTM3NDgxMTcsImlzcyI6Ik1HUyJ9.WtWbBeg2XBJVIES22q2WAXyZBj6XTYQ-p1eSakBiBLM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "messageId",
+							"value": "1706823227.586179534",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://indexer.guardianservice.app/api/v1/testnet/entities/vc-documents?keywords=[\"Buena%20Vista\",\"RST\",\"Gold%20Standard\",\"no%20poverty\"]",
+					"protocol": "https",
+					"host": [
+						"indexer",
+						"guardianservice",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"testnet",
+						"entities",
+						"vc-documents"
+					],
+					"query": [
+						{
+							"key": "keywords",
+							"value": "[\"Buena%20Vista\",\"RST\",\"Gold%20Standard\",\"no%20poverty\"]"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "VC-document-perID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzU4YWFjY2U1MmMwODliZDdhNGMyZSIsIm5hbWUiOiJzYWlfc3JpamEiLCJob3N0IjoiaW5kZXhlci5ndWFyZGlhbnNlcnZpY2UuYXBwIiwiaWF0IjoxNzUyNTM4NTE3LCJleHAiOjE3NTM3NDgxMTcsImlzcyI6Ik1HUyJ9.WtWbBeg2XBJVIES22q2WAXyZBj6XTYQ-p1eSakBiBLM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://indexer.guardianservice.app/api/v1/testnet/entities/vc-documents/1734579271.852063379",
+					"protocol": "https",
+					"host": [
+						"indexer",
+						"guardianservice",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"testnet",
+						"entities",
+						"vc-documents",
+						"1734579271.852063379"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MGS Indexer_Full_Text",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzU4YWFjY2U1MmMwODliZDdhNGMyZSIsIm5hbWUiOiJzYWlfc3JpamEiLCJob3N0IjoiaW5kZXhlci5ndWFyZGlhbnNlcnZpY2UuYXBwIiwiaWF0IjoxNzUyNTM4NTE3LCJleHAiOjE3NTM3NDgxMTcsImlzcyI6Ik1HUyJ9.WtWbBeg2XBJVIES22q2WAXyZBj6XTYQ-p1eSakBiBLM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://indexer.guardianservice.app/api/v1/testnet/search?search=vc&pageIndex=0&pageSize=10",
+					"protocol": "https",
+					"host": [
+						"indexer",
+						"guardianservice",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"testnet",
+						"search"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "vc"
+						},
+						{
+							"key": "pageIndex",
+							"value": "0"
+						},
+						{
+							"key": "pageSize",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MGS_Indexer_get_registry",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzU4YWFjY2U1MmMwODliZDdhNGMyZSIsIm5hbWUiOiJzYWlfc3JpamEiLCJob3N0IjoiaW5kZXhlci5ndWFyZGlhbnNlcnZpY2UuYXBwIiwiaWF0IjoxNzUyNTM4NTE3LCJleHAiOjE3NTM3NDgxMTcsImlzcyI6Ik1HUyJ9.WtWbBeg2XBJVIES22q2WAXyZBj6XTYQ-p1eSakBiBLM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "messageId",
+							"value": "1706823227.586179534",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://indexer.guardianservice.app/api/v1/testnet/entities/registries/",
+					"protocol": "https",
+					"host": [
+						"indexer",
+						"guardianservice",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"testnet",
+						"entities",
+						"registries",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MGS_Indexer_landing",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzU4YWFjY2U1MmMwODliZDdhNGMyZSIsIm5hbWUiOiJzYWlfc3JpamEiLCJob3N0IjoiaW5kZXhlci5ndWFyZGlhbnNlcnZpY2UuYXBwIiwiaWF0IjoxNzUyNTM4NTE3LCJleHAiOjE3NTM3NDgxMTcsImlzcyI6Ik1HUyJ9.WtWbBeg2XBJVIES22q2WAXyZBj6XTYQ-p1eSakBiBLM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://indexer.guardianservice.app/api/v1/testnet/landing/analytics",
+					"protocol": "https",
+					"host": [
+						"indexer",
+						"guardianservice",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"testnet",
+						"landing",
+						"analytics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MGS_Indexer_schemas",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzU4YWFjY2U1MmMwODliZDdhNGMyZSIsIm5hbWUiOiJzYWlfc3JpamEiLCJob3N0IjoiaW5kZXhlci5ndWFyZGlhbnNlcnZpY2UuYXBwIiwiaWF0IjoxNzUyNTM4NTE3LCJleHAiOjE3NTM3NDgxMTcsImlzcyI6Ik1HUyJ9.WtWbBeg2XBJVIES22q2WAXyZBj6XTYQ-p1eSakBiBLM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "messageId",
+							"value": "1706823227.586179534",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://indexer.guardianservice.app/api/v1/testnet/entities/schemas/",
+					"protocol": "https",
+					"host": [
+						"indexer",
+						"guardianservice",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"testnet",
+						"entities",
+						"schemas",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LocalIndexer",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3005/api/v1/search?search=vc&pageIndex=0&pageSize=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"v1",
+						"search"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "vc"
+						},
+						{
+							"key": "pageIndex",
+							"value": "0"
+						},
+						{
+							"key": "pageSize",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "transaction",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "BearerToken",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"hederaAccountId\":\"0.0.12345\",\"hederaAccountKey\":\"MC4CAQ...\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://guardianservice.app/api/v1/auth/token",
+					"protocol": "https",
+					"host": [
+						"guardianservice",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/search?search=Project",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "/search?search=Project",
+					"path": [
+						"search"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "Project"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://indexer.guardianservice.app/api/v1/testnet/topic/0.0.5133556/message",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://indexer.guardianservice.app/api/v1/testnet/topic/0.0.5133556/message",
+					"protocol": "https",
+					"host": [
+						"indexer",
+						"guardianservice",
+						"app"
+					],
+					"path": [
+						"api",
+						"v1",
+						"testnet",
+						"topic",
+						"0.0.5133556",
+						"message"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

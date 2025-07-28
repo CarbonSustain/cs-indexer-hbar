@@ -1,0 +1,86 @@
+{
+	"info": {
+		"_postman_id": "2b822832-c763-42c2-9b9e-94060eb90c03",
+		"name": "CS-Indexer-hedera",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45879128"
+	},
+	"item": [
+		{
+			"name": "SearchDocument",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "multipart/form-data",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"funding_target\": [100000, 500000],\r\n  \"timeframe\": [\"2025-Q4\", \"2026-Q2\"],\r\n  \"region\": [\"Buena Vista\"],\r\n  \"project_type\": [\"RST\"],\r\n  \"verification\": [\"Gold Standard\"],\r\n  \"sdgs\": [\"no poverty\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/search/documents",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"search",
+						"documents"
+					],
+					"query": [
+						{
+							"key": "funding_target",
+							"value": "[100000, 500000]",
+							"disabled": true
+						},
+						{
+							"key": "timeframe",
+							"value": "[\"2025-Q4\", \"2026-Q2\"]",
+							"disabled": true
+						},
+						{
+							"key": "region",
+							"value": "[\"Buena Vista\"]",
+							"disabled": true
+						},
+						{
+							"key": "project_type",
+							"value": "[\"RST\"]",
+							"disabled": true
+						},
+						{
+							"key": "verification",
+							"value": "[\"Gold Standard\"]",
+							"disabled": true
+						},
+						{
+							"key": "sdgs",
+							"value": "[\"no poverty\"]",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
