@@ -1,8 +1,10 @@
-import express from "express";
-import dotenv from "dotenv";
-import axios from "axios";
-import { createClient } from "./src/client";
-import { GlobalIndexer } from "./src/indexer"; // ← adjust path if needed
+const express = require("express");
+import { Request, Response } from "express"; // ✅ keep this line just for types
+
+const dotenv = require("dotenv");
+const axios = require("axios");
+const { createClient } = require("./src/client");
+const { GlobalIndexer } = require("./src/indexer");
 
 dotenv.config();
 
@@ -12,7 +14,7 @@ app.use(express.json());
 const client = createClient( `${process.env.BASE_URL}`, `${process.env.BEARER_TOKEN}`);
 const indexer = new GlobalIndexer(client);
 
-  app.post("/search/documents", async (req, res) => {
+  app.post("/search/documents", async (req: any, res:any) => {
     try {
       const keywords: string[] = [];
       const allowedKeys = ["region", "project_type", "verification", "sdgs"];

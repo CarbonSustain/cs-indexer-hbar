@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
     "target": "ES2019",
-    "module": "commonjs",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "outDir": "dist",
     "emitDeclarationOnly": false,
     "declaration": true,
     "strict": true,
-    "types": ["node"],  // ✅ add 'node' here
-    "esModuleInterop": true     // ✅ also needed for next fix
+    "types": ["node"],
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
-  "include": ["src/**/*", "test/**/*", "examples/main.ts"]
+  "include": ["src/**/*", "test/**/*", "examples/main.ts", "server.ts"]
 }
