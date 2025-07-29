@@ -1,2 +1,2 @@
-export { createClient } from './client';
-export { GlobalIndexer } from './indexer';
+export { createClient } from './client.js';
+export { GlobalIndexer } from './indexer.js';
