@@ -1,5 +1,5 @@
 import { AxiosInstance } from "axios";
-
+import { filterProjectBySDGs } from "./matchProject.js"
 export interface LandingAnalytics {
   date: string;
   registries: number;
@@ -12,7 +12,7 @@ export interface LandingAnalytics {
 }
 
 export class GlobalIndexer {
-  constructor(private client: AxiosInstance) {}
+  constructor(private client: AxiosInstance) { }
 
   async getLandingAnalytics(): Promise<LandingAnalytics[]> {
     const resp = await this.client.get("/landing/analytics");
@@ -31,83 +31,62 @@ export class GlobalIndexer {
     return resp.data;
   }
 
-  async getDocumentsByKeywords(filters: {
-    region?: string[],
-    project_type?: string[],
-    verification?: string[],
-    sdgs?: string[]
-}): Promise<any[]> {
-    // 1. Extract relevant filters into a flat string array
-    const {
-        region = [],
-        project_type = [],
-        verification = [],
-        sdgs = []
-    } = filters;
+  async getDocumentsByKeywords(
+    funding_target: string[] = [],
+    timeframe: string[] = [],
+    region: string[] = [],
+    project_type: string[] = [],
+    verification: string[] = [],
+    sdgs: string[] = []
+  ): Promise<any[]> {
 
     const keywords: string[] = [
-        ...region,
-        ...project_type,
-        ...verification,
-        ...sdgs
-    ].filter(Boolean); // Remove any falsy entries
+      ...region,
+      ...project_type,
+      ...verification,
+      ...sdgs
+    ].filter(Boolean);
 
     // 2. Validate
     if (!Array.isArray(keywords) || keywords.length === 0) {
-        throw new Error("At least one filter (region, project_type, verification, sdgs) must be non-empty.");
+      throw new Error("At least one filter (funding_target, timeframe, region, project_type, verification, sdgs) must be non-empty.");
     }
 
-    // 3. Format as encoded JSON array of strings
     const encodedKeywords = `[${keywords.map(k => `"${encodeURIComponent(k)}"`).join(",")}]`;
-
-    // 4. Call indexer API
-    const resp = await this.client.get(`/entities/vc-documents?keywords=${encodedKeywords}`);
+    const resp = await this.client.get(`/entities/vc-documents?keywords=${encodedKeywords}&schemaType=VerifyProject`);
     const items: any[] = resp?.data?.items || [];
 
-    return items;
+    const filteredItems = [];
+    for (const item of items) {
+
+      const textSearch = item?.analytics?.textSearch || '';
+      const matches = filterProjectBySDGs(textSearch, sdgs);
+
+      if (matches) {
+        filteredItems.push(item)
+      }
+    }
+    return filteredItems;
+  }
+
+  async getVcByMessageId(messageId: string): Promise<any> {
+    if (!messageId) {
+      throw new Error("Message ID is required.");
+    }
+
+    try {
+      const resp = await this.client.get(`/entities/vc-documents/${messageId}`);
+      const fullDoc = resp?.data;
+
+      if (!fullDoc) {
+        throw new Error(`No document found for message ID: ${messageId}`);
+      }
+
+      console.log(`Successfully retrieved document for message ID: ${messageId}`);
+      return fullDoc;
+    } catch (err) {
+      console.error(`Failed to fetch document with message ID ${messageId}:`, err);
+      throw err;
+    }
+  }
 }
-
-//   async getDocumentsByKeywords(keywords: string[] = []): Promise<any[]>{
-//     if (!Array.isArray(keywords) || keywords.length === 0) {
-//         throw new Error("Keywords must be a non-empty array.");
-//     }
-
-//     const encodedKeywords = `[${keywords.map(k => `"${encodeURIComponent(k)}"`).join(",")}]`;
-//     // console.log(encodedKeywords)
-//     const resp = await this.client.get(`/entities/vc-documents?keywords=${encodedKeywords}`);
-//     // console.log("getting the VC",resp.data.items.data.items)
-//     // console.log(resp)
-//     const items: any[] = resp?.data?.items;
-//     // console.log(items)
-//     // const documents = await Promise.all(items.map(async (item: any) => {
-//     //     const timestamp = item.consensusTimestamp;
-//     //     if (!timestamp) return null;
-
-//         // try {
-//         //     const docResp = await this.client.get(`/entities/vc-documents/${timestamp}`);
-//         //     const docString = docResp.data?.item?.documents?.[0];
-//         //     if (!docString) return null;
-
-//         //     try {
-//         //         return JSON.parse(docString);
-//         //     } catch (parseErr) {
-//         //         console.error(`Error parsing document for ${timestamp}:`, parseErr instanceof Error ? parseErr.message : parseErr);
-//         //         return null;
-//         //     }
-//         // } catch (err) {
-//         //     if (err instanceof Error) {
-//         //         console.error(`Error fetching document for ${timestamp}:`, err.message);
-//         //     } else {
-//         //         console.error(`Error fetching document for ${timestamp}:`, err);
-//         //     }
-//         //     return null;
-//         // }
-//     // }));
- 
-//     return items // filter out nulls
-// }
-
-
-  // ...add more per documentation e.g. getPolicies(), getTokens(), etc.
-}
-
