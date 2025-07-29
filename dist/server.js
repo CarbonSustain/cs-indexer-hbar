@@ -56,8 +56,8 @@ app.post("/search/documents", async (req, res) => {
                 });
             }
         }
-        // console.log("Final keywords:", keywords);
-        const result = await indexer.getDocumentsByKeywords(keywords);
+        //  console.log("Final keywords:", JSON.parse(String(req.body)));
+        const result = await indexer.getDocumentsByKeywords(req.body);
         // console.log(result)
         res.json(result);
     }

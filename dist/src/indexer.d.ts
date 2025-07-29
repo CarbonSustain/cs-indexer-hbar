@@ -15,5 +15,10 @@ export declare class GlobalIndexer {
     getLandingAnalytics(): Promise<LandingAnalytics[]>;
     fullTextSearch(query: string, pageIndex?: number, pageSize?: number): Promise<any>;
     getSchemaById(messageId: string): Promise<any>;
-    getDocumentsByKeywords(keywords?: string[]): Promise<any[]>;
+    getDocumentsByKeywords(filters: {
+        region?: string[];
+        project_type?: string[];
+        verification?: string[];
+        sdgs?: string[];
+    }): Promise<any[]>;
 }

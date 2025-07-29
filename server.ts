@@ -61,8 +61,8 @@ const indexer = new GlobalIndexer(client);
         }
       }
   
-      // console.log("Final keywords:", keywords);
-      const result = await indexer.getDocumentsByKeywords(keywords);
+    //  console.log("Final keywords:", JSON.parse(String(req.body)));
+      const result = await indexer.getDocumentsByKeywords(req.body);
       // console.log(result)
       res.json(result);
     } catch (err: any) {
