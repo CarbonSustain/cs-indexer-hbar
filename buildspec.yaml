@@ -5,13 +5,18 @@ phases:
     runtime-versions:
       nodejs: 18
     commands:
-      - echo Getting GitHub token from Secrets Manager...
+      - echo "Getting GitHub PAT from Secrets Manager..."
       - export GITHUB_PAT=$(aws secretsmanager get-secret-value --secret-id github/pat --query SecretString --output text)
-      - echo "
-//npm.pkg.github.com/:_authToken=$GITHUB_PAT" > ~/.npmrc
+      - echo "//npm.pkg.github.com/:_authToken=$GITHUB_PAT" > ~/.npmrc
       - git config --global url."https://$GITHUB_PAT@github.com/".insteadOf "https://github.com/"
-      - echo Installing dependencies...
+      - echo "Installing dependencies..."
       - npm install
+
   build:
     commands:
+      - echo "Running build..."
       - npm run build
+
+artifacts:
+  files:
+    - '**/*'
