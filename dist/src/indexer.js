@@ -17,66 +17,68 @@ export class GlobalIndexer {
         const resp = await this.client.get(`/entities/schemas/${encodeURIComponent(messageId)}`);
         return resp.data;
     }
+    async fetchProjectsBasedOnSchema(schema, sdgs) {
+        var _a;
+        // Step 1: Build keywords array
+        const keywords = [schema, sdgs];
+        const encodedKeywords = encodeURIComponent(JSON.stringify(keywords));
+        // Step 2: Call the indexer API to get a list of project items
+        const resp = await this.client.get(`/entities/vc-documents?keywords=${encodedKeywords}`);
+        const items = ((_a = resp === null || resp === void 0 ? void 0 : resp.data) === null || _a === void 0 ? void 0 : _a.items) || [];
+        const SchemaBasedProjects = items;
+        return SchemaBasedProjects;
+    }
+    async fetchBasedOnSchemaID(schemaIds) {
+        var _a;
+        const SchemaBasedProjects = [];
+        for (const id of schemaIds) {
+            const resp = await this.client.get(`/entities/vc-documents?analytics.schemaId=${encodeURIComponent(id)}`);
+            const items = ((_a = resp === null || resp === void 0 ? void 0 : resp.data) === null || _a === void 0 ? void 0 : _a.items) || [];
+            SchemaBasedProjects.push(...items);
+        }
+        return SchemaBasedProjects;
+    }
     async getDocumentsByKeywords(funding_target = [], timeframe = [], region = [], project_type = [], verification = [], sdgs = []) {
         var _a, _b;
-        // ...region,
-        // ...project_type,
-        // ...verification,
+        const submitProjects = await this.fetchProjectsBasedOnSchema('SubmitProject', 'sdg');
+        const verifyProjects = await this.fetchProjectsBasedOnSchema('Verify Project', 'sdg');
+        const ProjectSubmissionForm = await this.fetchProjectsBasedOnSchema('Project Submission Form', 'sdg');
+        const GHGProjects = await this.fetchBasedOnSchemaID(['1733734487.531116964', '1733906381.658350000']);
+        const Projects = [...submitProjects, ...verifyProjects, ...GHGProjects, ...ProjectSubmissionForm];
         const keywords = [
             ...region,
             ...project_type,
             ...verification,
             ...sdgs
-        ].filter(Boolean); // Remove any falsy entries
+        ].filter(Boolean);
         // 2. Validate
         if (!Array.isArray(keywords) || keywords.length === 0) {
             throw new Error("At least one filter (funding_target, timeframe, region, project_type, verification, sdgs) must be non-empty.");
         }
-        // 3. Format as encoded JSON array of strings
-        const encodedKeywords = `[${keywords.map(k => `"${encodeURIComponent(k)}"`).join(",")}]`;
-        const resp = await this.client.get(`/entities/vc-documents?keywords=${encodedKeywords}&schemaType=VerifyProject`);
-        const items = ((_a = resp === null || resp === void 0 ? void 0 : resp.data) === null || _a === void 0 ? void 0 : _a.items) || [];
-        console.log(items.length);
-        const filteredItems = [];
-        for (const item of items) {
-            // console.log(item)
-            const textSearch = ((_b = item === null || item === void 0 ? void 0 : item.analytics) === null || _b === void 0 ? void 0 : _b.textSearch) || '';
-            const matches = filterProjectBySDGs(textSearch, sdgs);
-            // console.log(matches)
-            const messageId = item === null || item === void 0 ? void 0 : item.consensusTimestamp;
-            if (matches) {
-                filteredItems.push(item);
-            }
+        const useKeywordSearch = (keywords.length > 0 &&
+            sdgs.length > 0 &&
+            keywords.length > sdgs.length);
+        if (useKeywordSearch) {
+            const resp = await this.client.get(`/entities/vc-documents?keywords=${encodeURIComponent(JSON.stringify(keywords))}`);
+            const items = ((_a = resp === null || resp === void 0 ? void 0 : resp.data) === null || _a === void 0 ? void 0 : _a.items) || [];
+            const ProjectsBasedOnKeywords = items;
+            console.log(ProjectsBasedOnKeywords.length);
+            return ProjectsBasedOnKeywords;
         }
-        console.log(items.length);
-        return filteredItems;
-        // Extract SDGs from filters
-        // const sdgsArray: string[] = sdgs || [];
-        // for (const item of items) {
-        //   const messageId = item?.consensusTimestamp;
-        //   if (!messageId) continue;
-        //   try {
-        //     const detailResp = await this.client.get(`/entities/vc-documents/${messageId}`);
-        //     const fullDoc = detailResp?.data;
-        //     const documentString = fullDoc?.item?.documents?.[0];
-        //     let parsedDoc;
-        //     if (JSON.parse(documentString) !== undefined) {
-        //       try {
-        //         parsedDoc = JSON.parse(documentString);
-        //       } catch (err) {
-        //         console.error("Invalid document JSON:", err);
-        //       }
-        //     }
-        //     // Filter by SDGs using the extracted array
-        //     const matches = filterProjectBySDGs(parsedDoc, sdgsArray);
-        //     if (matches) {
-        //       filtered_items.push(parsedDoc);
-        //     }
-        //   } catch (err) {
-        //     console.error(`Failed to fetch document with timestamp ${messageId}:`, err);
-        //   }
-        // }
-        // return filtered_items;
+        else {
+            const filteredWithCount = [];
+            for (const item of Projects) {
+                const textSearch = ((_b = item === null || item === void 0 ? void 0 : item.analytics) === null || _b === void 0 ? void 0 : _b.textSearch) || '';
+                const matchCount = filterProjectBySDGs(textSearch, sdgs);
+                if (matchCount > 0) {
+                    filteredWithCount.push({ item, count: matchCount });
+                }
+            }
+            filteredWithCount.sort((a, b) => b.count - a.count);
+            const filteredItems = filteredWithCount.map(entry => entry.item);
+            console.log(filteredItems.length);
+            return filteredItems;
+        }
     }
     async getVcByMessageId(messageId) {
         if (!messageId) {

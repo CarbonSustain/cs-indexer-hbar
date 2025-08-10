@@ -5,54 +5,6 @@ import { createClient } from "./src/client.js";
 import { GlobalIndexer } from "./src/indexer.js"
 import { Request, Response } from "express"; // ✅ keep this line just for types
 
-// Helper functions for validation and data processing
-const ALLOWED_FILTER_KEYS = ["funding_target", "timeframe", "region", "project_type", "verification", "sdgs"];
-
-function parseValueToArray(value: any): string[] {
-  if (typeof value === "string") {
-    try {
-      const parsed = JSON.parse(value);
-      if (Array.isArray(parsed)) {
-        return parsed.map(v => String(v).trim()).filter(v => v.length > 0);
-      } else {
-        return [String(parsed).trim()];
-      }
-    } catch {
-      return value.split(",").map((v: string) => v.trim()).filter((v: string) => v.length > 0);
-    }
-  } else if (Array.isArray(value)) {
-    return value.map(v => String(v).trim()).filter(v => v.length > 0);
-  } else if (value !== undefined && value !== null) {
-    return [String(value).trim()];
-  }
-  return [];
-}
-
-function validateAndExtractFilters(body: any): any {
-  const filters: any = {};
-  
-  for (const key of ALLOWED_FILTER_KEYS) {
-    const value = body[key];
-    if (value !== undefined && value !== null) {
-      const parsedArray = parseValueToArray(value);
-      if (parsedArray.length > 0) {
-        filters[key] = parsedArray;
-      }
-    }
-  }
-  
-  const hasFilters = Object.keys(filters).some(key => filters[key] && filters[key].length > 0);
-  if (!hasFilters) {
-    throw new Error("At least one filter must be provided from: funding_target, timeframe, region, project_type, verification, sdgs");
-  }
-  
-  console.log("Filters:", filters);
-  return filters;
-}
-
-// const { createClient } = require("./src/client");
-// const { GlobalIndexer } = require("./src/indexer");
-
 dotenv.config();
 
 const app = express();
@@ -63,14 +15,22 @@ const indexer = new GlobalIndexer(client);
 
 app.post("/search/documents", async (req: any, res: any) => {
   try {
-    const filters = validateAndExtractFilters(req.body);
+    const { 
+      funding_target = [], 
+      timeframe = [], 
+      region = [], 
+      project_type = [], 
+      verification = [], 
+      sdgs = [] 
+    } = req.body;
+
     const result = await indexer.getDocumentsByKeywords(
-      filters.funding_target || [],
-      filters.timeframe || [],
-      filters.region || [],
-      filters.project_type || [],
-      filters.verification || [],
-      filters.sdgs || []
+      funding_target || [],
+      timeframe || [],
+      region || [],
+      project_type || [],
+      verification || [],
+      sdgs || []
     );
     res.json(result);
   } catch (err: any) {

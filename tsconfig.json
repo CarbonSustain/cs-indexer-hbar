@@ -7,7 +7,7 @@
     "emitDeclarationOnly": false,
     "declaration": true,
     "strict": true,
-    "types": ["node"],
+    "types": ["node", "jest"],
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
