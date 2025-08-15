@@ -1,5 +1,9 @@
-import { AxiosInstance } from "axios";
-export interface LandingAnalytics {
+import * as axios from 'axios';
+import { AxiosInstance } from 'axios';
+
+declare function createClient(baseURL: string, apiKey?: string): axios.AxiosInstance;
+
+interface LandingAnalytics {
     date: string;
     registries: number;
     methodologies: number;
@@ -9,7 +13,7 @@ export interface LandingAnalytics {
     totalFungible: number;
     id: string;
 }
-export interface ProjectResponse {
+interface ProjectResponse {
     id: string;
     lastUpdate: number;
     topicId: string;
@@ -41,7 +45,7 @@ export interface ProjectResponse {
     loaded: boolean;
     processedProjects: boolean;
 }
-export declare class GlobalIndexer {
+declare class GlobalIndexer {
     private client;
     constructor(client: AxiosInstance);
     getLandingAnalytics(): Promise<LandingAnalytics[]>;
@@ -52,3 +56,5 @@ export declare class GlobalIndexer {
     getDocumentsByKeywords(funding_target?: string[], timeframe?: string[], region?: string[], project_type?: string[], verification?: string[], sdgs?: string[]): Promise<any[]>;
     getVcByMessageId(messageId: string): Promise<any>;
 }
+
+export { GlobalIndexer, createClient };
