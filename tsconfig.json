@@ -1,15 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ES2019",
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "outDir": "dist",
-    "emitDeclarationOnly": false,
-    "declaration": true,
+    "target": "ES2022",
+    "moduleResolution": "Bundler",
     "strict": true,
-    "types": ["node", "jest"],
+    "declaration": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "resolveJsonModule": true,
+    "skipLibCheck": true
   },
-  "include": ["src/**/*", "test/**/*", "examples/main.ts", "server.ts"]
+  "include": ["src"]
 }
